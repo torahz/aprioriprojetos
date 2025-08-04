@@ -2,8 +2,7 @@
   "name": "A Priori Projetos - Gerador de Orçamentos",
   "short_name": "A Priori Orçamentos",
   "description": "Aplicativo profissional para geração de orçamentos de projetos arquitetônicos",
-  "start_url": "./",
-  "scope": "./"
+  "start_url": "https://torahz.github.io/aprioriprojetos/",
   "display": "minimal-ui",
   "background_color": "#fafafa",
   "theme_color": "#718096",
