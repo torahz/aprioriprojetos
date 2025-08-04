@@ -17,13 +17,20 @@ const STATIC_CACHE_URLS = [
 
 // Instalação do Service Worker
 self.addEventListener('install', event => {
+  console.log('Service Worker: Install Event');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Cache aberto');
-        return cache.addAll(urlsToCache);
+        // CORREÇÃO: usar STATIC_CACHE_URLS em vez de urlsToCache
+        return cache.addAll(STATIC_CACHE_URLS);
+      })
+      .catch(error => {
+        console.error('Erro ao fazer cache dos arquivos:', error);
       })
   );
+  // Força a ativação imediata do novo Service Worker
+  self.skipWaiting();
 });
 
 // Activate Event - Clean up old caches
@@ -48,18 +55,27 @@ self.addEventListener('activate', (event) => {
 
 // Fetch Event - Serve cached content when offline
 self.addEventListener('fetch', (event) => {
-  console.log('Service Worker: Fetch Event', event.request.url);
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
   
-  // Skip cross-origin requests
-  if (!event.request.url.startsWith(self.location.origin)) {
+  // Skip cross-origin requests except for fonts
+  if (!event.request.url.startsWith(self.location.origin) && 
+      !event.request.url.includes('fonts.googleapis.com')) {
     return;
   }
   
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request)
+        // Return cached version if available
+        if (response) {
+          return response;
+        }
+        
+        // Fetch from network
+        return fetch(event.request)
           .then((fetchResponse) => {
             // Check if we received a valid response
             if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
@@ -69,6 +85,7 @@ self.addEventListener('fetch', (event) => {
             // Clone the response
             const responseToCache = fetchResponse.clone();
 
+            // Cache the response
             caches.open(CACHE_NAME)
               .then((cache) => {
                 cache.put(event.request, responseToCache);
@@ -78,9 +95,9 @@ self.addEventListener('fetch', (event) => {
           });
       })
       .catch(() => {
-        // If both cache and network fail, show offline page
+        // If both cache and network fail, show offline page for documents
         if (event.request.destination === 'document') {
-          return caches.match('./');
+          return caches.match('./index.html');
         }
       })
   );

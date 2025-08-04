@@ -3,11 +3,11 @@
   "short_name": "A Priori Orçamentos",
   "description": "Aplicativo profissional para geração de orçamentos de projetos arquitetônicos",
   "start_url": "https://torahz.github.io/aprioriprojetos/",
-  "display": "minimal-ui",
+  "display": "standalone",
   "background_color": "#fafafa",
   "theme_color": "#718096",
   "orientation": "portrait-primary",
-  "scope": "./",
+  "scope": "https://torahz.github.io/aprioriprojetos/",
   "lang": "pt-BR",
   "categories": ["business", "productivity"],
   "icons": [
@@ -81,7 +81,7 @@
       "name": "Novo Orçamento",
       "short_name": "Novo",
       "description": "Criar um novo orçamento",
-      "url": "./",
+      "url": "/aprioriprojetos/",
       "icons": [
         {
           "src": "icon-192.png",
