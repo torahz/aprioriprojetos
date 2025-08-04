@@ -15,18 +15,13 @@ const STATIC_CACHE_URLS = [
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
-// Install Event - Cache static assets
-self.addEventListener('install', (event) => {
-  console.log('Service Worker: Install Event');
+// Instalação do Service Worker
+self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Service Worker: Caching App Shell');
-        return cache.addAll(STATIC_CACHE_URLS);
-      })
-      .then(() => {
-        console.log('Service Worker: Skip Waiting');
-        return self.skipWaiting();
+      .then(cache => {
+        console.log('Cache aberto');
+        return cache.addAll(urlsToCache);
       })
   );
 });
