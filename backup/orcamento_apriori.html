@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamento - A Priori Projetos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            line-height: 1.4;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h1 {
+            font-size: 12px;
+        }
+
+        h2 {
+            font-size: 12px;
+        }
+
+        h3 {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 12px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="date"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        .metragem-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .checkbox-item {
+            border: 2px solid #ecf0f1;
+            border-radius: 4px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item:hover {
+            border-color: #3498db;
+            background-color: #f8f9fa;
+        }
+
+        .checkbox-item.checked {
+            border-color: #27ae60;
+            background-color: #d5f4e6;
+        }
+
+        .main-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .main-checkbox input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .main-checkbox label {
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .sub-options {
+            margin-left: 30px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ecf0f1;
+            display: none;
+        }
+
+        .sub-options.show {
+            display: block;
+        }
+
+        .sub-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .sub-option input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .sub-option label {
+            font-weight: normal;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #7f8c8d;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .resume-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 2px solid #34495e;
+        }
+
+        .resume-table th,
+        .resume-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #7f8c8d;
+        }
+
+        .resume-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+
+        .resume-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .resume-table .total-row {
+            background-color: #3498db !important;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* ESTILOS PARA O ORÇAMENTO FINAL */
+        .final-budget {
+            display: none;
+            background: white;
+            margin-top: 30px;
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+        }
+
+        .final-budget.show {
+            display: block !important;
+        }
+
+        /* Cabeçalho do orçamento */
+        .budget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #34495e;
+        }
+
+        .budget-date {
+            font-size: 9px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .budget-logo {
+            max-width: 200px;
+            height: auto;
+        }
+
+        /* Dados do cliente */
+        .client-info {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+        }
+
+        .client-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .client-info p {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        /* Descrição dos serviços */
+        .service-description {
+            margin-bottom: 25px;
+        }
+
+        .service-description h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .service-description textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        /* Tabela de itens */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+
+        .items-table th,
+        .items-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .items-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .items-table .price-cell {
+            text-align: right;
+        }
+
+        .items-table .total-row {
+            background-color: #e8f4f8;
+            font-weight: bold;
+        }
+
+        /* Segunda página - Condições Gerais */
+        .page-break {
+            page-break-before: always;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #ddd;
+        }
+
+        .general-conditions {
+            margin-top: 30px;
+        }
+
+        .general-conditions h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+
+        .condition-section {
+            margin-bottom: 20px;
+        }
+
+        .condition-section h4 {
+            color: #34495e;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .condition-section p, .condition-section textarea {
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .condition-section textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+        }
+
+        /* Assinatura */
+        .signature-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .signature-section p {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .signature-image {
+            max-width: 200px;
+            max-height: 80px;
+            border: 1px dashed #ddd;
+            padding: 10px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .signature-placeholder {
+            width: 200px;
+            height: 80px;
+            border: 1px dashed #ddd;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        /* Botões de ação */
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            background-color: #219a52;
+            transform: scale(1.1);
+        }
+
+        .edit-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .edit-btn:hover {
+            background-color: #e67e22;
+            transform: scale(1.05);
+        }
+
+        /* Estilos para impressão */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                font-size: 12px;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 20px;
+                max-width: none;
+                margin: 0;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .step {
+                display: none !important;
+            }
+            
+            .final-budget {
+                display: block !important;
+            }
+            
+            .page-break {
+                page-break-before: always;
+                margin-top: 0;
+                padding-top: 30px;
+                border-top: none;
+            }
+            
+            .budget-header {
+                page-break-after: avoid;
+            }
+            
+            .items-table {
+                page-break-inside: avoid;
+            }
+            
+            .general-conditions {
+                page-break-before: auto;
+            }
+
+            .signature-section {
+                page-break-inside: avoid;
+            }
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: #27ae60;
+            background-color: #d5f4e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border-left: 4px solid #27ae60;
+        }
+
+        .complexity-options {
+            margin-left: 30px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ecf0f1;
+            display: none;
+        }
+
+        .complexity-options.show {
+            display: block;
+        }
+
+        .complexity-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .complexity-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .complexity-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .complexity-item label {
+            font-weight: normal;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .complexity-price {
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        /* Estilos para campo de parcelas */
+        .payment-config {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+
+        .payment-config label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .payment-config input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="no-print">Gerador de Orçamento</h1>
+        
+        <!-- Etapa 1: Dados do Cliente -->
+        <div class="step active" id="step1">
+            <h2>1. Informações do Cliente</h2>
+            
+            <div class="form-group">
+                <label for="data">Data:</label>
+                <input type="date" id="data" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cliente">Nome do Cliente:</label>
+                <input type="text" id="cliente" placeholder="Digite o nome do cliente" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="estabelecimento">Estabelecimento:</label>
+                <input type="text" id="estabelecimento" placeholder="Nome do estabelecimento" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Tipo de Projeto:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="tipoProjeto" value="loja" checked onclick="atualizarMetragens()"> Loja</label>
+                    <label><input type="radio" name="tipoProjeto" value="producao" onclick="atualizarMetragens()"> Produção</label>
+                    <label><input type="radio" name="tipoProjeto" value="ambos" onclick="atualizarMetragens()"> Loja e Produção</label>
+                </div>
+            </div>
+            
+            <div class="metragem-fields">
+                <div class="form-group" id="metragemLoja">
+                    <label for="m2Loja">Metragem da Loja (m²):</label>
+                    <input type="number" id="m2Loja" min="0" max="1500" placeholder="0">
+                </div>
+                <div class="form-group" id="metragemProducao" style="display: none;">
+                    <label for="m2Producao">Metragem da Produção (m²):</label>
+                    <input type="number" id="m2Producao" min="0" max="1500" placeholder="0">
+                </div>
+            </div>
+        </div>
+
+        <!-- Etapa 2: Seleção de Serviços -->
+        <div class="step" id="step2">
+            <h2>2. Serviços a serem Orçados</h2>
+            
+            <div class="checkbox-group">
+                <!-- Levantamento -->
+                <div class="checkbox-item">
+                    <div class="main-checkbox">
+                        <input type="checkbox" id="levantamento" onchange="toggleMainService('levantamento')">
+                        <label for="levantamento">Levantamento da Área</label>
+                    </div>
+                </div>
+                
+                <!-- Layout -->
+                <div class="checkbox-item">
+                    <div class="main-checkbox">
+                        <input type="checkbox" id="layout" onchange="toggleMainService('layout')">
+                        <label for="layout">Layout (em planta baixa)</label>
+                    </div>
+                </div>
+                
+                <!-- Planta Técnica -->
+                <div class="checkbox-item">
+                    <div class="main-checkbox">
+                        <input type="checkbox" id="planta" onchange="toggleMainService('planta')">
+                        <label for="planta">Planta Técnica</label>
+                    </div>
+                </div>
+                
+                <!-- Diagrama de Teto -->
+                <div class="checkbox-item">
+                    <div class="main-checkbox">
+                        <input type="checkbox" id="teto" onchange="toggleMainService('teto')">
+                        <label for="teto">Diagrama de Teto</label>
+                    </div>
+                </div>
+                
+                <!-- Diagrama de Acabamentos -->
+                <div class="checkbox-item">
+                    <div class="main-checkbox">
+                        <input type="checkbox" id="acabamento" onchange="toggleMainService('acabamento')">
+                        <label for="acabamento">Projetos de Decoração (especificação de acabamentos)</label>
+                    </div>
+                </div>
+                
+                <!-- Perspectiva -->
+                <div class="checkbox-item">
+                    <div class="main-checkbox">
+                        <input type="checkbox" id="perspectiva" onchange="toggleMainService('perspectiva')">
+                        <label for="perspectiva">Perspectiva 3D</label>
+                    </div>
+                </div>
+                
+                <!-- Fachada -->
+                <div class="checkbox-item">
+                    <div class="main-checkbox">
+                        <input type="checkbox" id="fachada" onchange="toggleMainService('fachada')">
+                        <label for="fachada">Fachada</label>
+                    </div>
+                    <div class="sub-options" id="fachadaOptions">
+                        <div class="sub-option">
+                            <input type="checkbox" id="fachada_otimizacao" checked disabled>
+                            <label for="fachada_otimizacao">Otimização do visual externo (R$ 1.225,00)</label>
+                        </div>
+                        <div class="sub-option">
+                            <input type="checkbox" id="fachada_acabamentos">
+                            <label for="fachada_acabamentos">+ Especificação de acabamentos (R$ 300,00)</label>
+                        </div>
+                        <div class="sub-option">
+                            <input type="checkbox" id="fachada_placa">
+                            <label for="fachada_placa">+ Design da placa externa (R$ 300,00)</label>
+                        </div>
+                        <div class="sub-option">
+                            <input type="checkbox" id="fachada_toldo">
+                            <label for="fachada_toldo">+ Especificação de toldo (R$ 820,00)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detalhamento -->
+                <div class="checkbox-item">
+                    <div class="main-checkbox">
+                        <input type="checkbox" id="detalhamento" onchange="toggleMainService('detalhamento')">
+                        <label for="detalhamento">Design de Peças e Detalhamentos</label>
+                    </div>
+                    <div class="complexity-options" id="detalhamentoOptions">
+                        <div class="complexity-item">
+                            <input type="checkbox" id="detalhamento_simples">
+                            <label for="detalhamento_simples">Peça Simples (Baixa Complexidade)</label>
+                            <span class="complexity-price">R$ 250,00</span>
+                        </div>
+                        <div class="complexity-item">
+                            <input type="checkbox" id="detalhamento_medio">
+                            <label for="detalhamento_medio">Peça Normal (Média Complexidade)</label>
+                            <span class="complexity-price">R$ 400,00</span>
+                        </div>
+                        <div class="complexity-item">
+                            <input type="checkbox" id="detalhamento_complexo">
+                            <label for="detalhamento_complexo">Peça Complexa (Alta Complexidade)</label>
+                            <span class="complexity-price">R$ 850,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Etapa 3: Resumo -->
+        <div class="step" id="step3">
+            <h2>3. Resumo do Orçamento</h2>
+            
+            <div id="resumoOrcamento">
+                <!-- Conteúdo será preenchido dinamicamente -->
+            </div>
+            
+            <div class="payment-config">
+                <div>
+                    <label for="numeroParcelas">Número de Parcelas:</label>
+                    <input type="number" id="numeroParcelas" min="1" max="12" value="3" onchange="atualizarCalculos()">
+                </div>
+                <div>
+                    <label for="descontoVista">Desconto à Vista (%):</label>
+                    <input type="number" id="descontoVista" min="0" max="50" value="5" step="0.5" onchange="atualizarCalculos()">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="observacoes">Observações Adicionais:</label>
+                <textarea id="observacoes" rows="4" placeholder="Digite observações adicionais para o orçamento..."></textarea>
+            </div>
+        </div>
+
+        <!-- Navegação -->
+        <div class="navigation no-print">
+            <button class="btn btn-secondary" id="btnAnterior" onclick="voltarEtapa()" disabled>Anterior</button>
+            <button class="btn btn-primary" id="btnProximo" onclick="proximaEtapa()">Próximo</button>
+        </div>
+    </div>
+
+    <!-- Orçamento Final -->
+    <div class="final-budget" id="finalBudget">
+        <!-- Cabeçalho -->
+        <div class="budget-header">
+            <div>
+                <div class="budget-date" id="budgetDate"></div>
+            </div>
+            <div>
+                <img src="LogoAPriori.png" alt="A Priori Projetos" class="budget-logo" id="budgetLogo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display: none; width: 200px; height: 60px; border: 1px dashed #ccc; text-align: center; line-height: 60px; font-size: 12px; color: #999;">Logo A Priori (LogoAPriori.png)</div>
+            </div>
+        </div>
+
+        <!-- Dados do Cliente -->
+        <div class="client-info">
+            <h3>Dados do Cliente</h3>
+            <p><strong>Estabelecimento:</strong> <span id="budgetEstabelecimento"></span></p>
+            <p><strong>Aos cuidados de:</strong> <span id="budgetCliente"></span></p>
+            <p><strong>Tipo de Projeto:</strong> <span id="budgetTipoProjeto"></span></p>
+            <p><strong>Metragem:</strong> <span id="budgetMetragem"></span></p>
+        </div>
+
+        <!-- Descrição dos Serviços -->
+        <div class="service-description">
+            <h3>Descrição dos Serviços</h3>
+            <textarea id="serviceDescriptionText" placeholder="Digite aqui uma breve descrição da proposta do orçamento...">Proposta para desenvolvimento de projeto arquitetônico para estabelecimento comercial, incluindo os serviços especificados na tabela abaixo.</textarea>
+        </div>
+
+        <!-- Tabela de Itens -->
+        <table class="items-table" id="budgetItemsTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Descrição</th>
+                    <th>Valor (R$)</th>
+                </tr>
+            </thead>
+            <tbody id="budgetItemsBody">
+                <!-- Itens serão preenchidos dinamicamente -->
+            </tbody>
+        </table>
+
+        <!-- Segunda Página - Condições Gerais -->
+        <div class="page-break">
+            <div class="general-conditions">
+                <h2>Condições Gerais</h2>
+                
+                <div class="condition-section">
+                    <h4>Condição de Pagamento</h4>
+                    <textarea id="paymentTerms" placeholder="Especifique as condições de pagamento...">Pagamento a prazo em até 3 pagamentos iguais de R$ 0.000,00, de 30/30 dias.
+ou pagamento à vista com 5% de desconto.</textarea>
+                </div>
+
+                <div class="condition-section">
+                    <h4>Prazo de Entrega</h4>
+                    <textarea id="deliveryTerms" placeholder="Especifique os prazos de entrega...">LEVANTAMENTO/MEDIÇÃO: até 05 dias úteis após pagamento do sinal.
+LAYOUT PRELIMINAR: até 15 dias úteis após medição.
+ALTERAÇÃO DE LAYOUT: até 03 dias úteis.
+ENTREGA DO PROJETO: até 30 dias úteis após definição do layout.</textarea>
+                </div>
+
+                <div class="condition-section">
+                    <h4>Observações</h4>
+                    <textarea id="generalObservations" placeholder="Observações gerais...">I. O serviço proposto trata-se de projeto de interiores não contemplando projeto de construção e suas implicações de responsabilidade técnica ou aprovação junto a prefeitura.
+
+II. Não faz parte desta proposta, projeto de exaustão/ar-condicionado, projeto elétrico, projeto hidráulico ou estrutural, combate a incêndio, também levantamento topográfico e paisagismo e arte final para comunicação visual.
+
+III. Caso seja necessário aprovação do projeto junto a Vigilância Sanitária haverá orçamento complementar.
+
+IV. Apresentado a proposta do projeto (especificamente o layout e a decoração), fica estabelecido um prazo máximo de 30 dias para solicitação de alterações. Após este prazo, mudanças na proposta inicial ou alteração depois de aprovada a proposta, implicarão custos adicionais.
+
+V. Está incluso no preço 02 visitas técnicas ao local, sendo uma para levantamento e medição, e outra para discussão do layout preliminar, as demais apresentações poderão ser feitas através de videoconferência sem custo, ou através de visitas, calculadas conforme item 08.
+
+VI. Esta proposta é válida por 07 dias, podendo ser reavaliada mediante consulta.</textarea>
+                </div>
+            </div>
+
+            <!-- Assinatura -->
+            <div class="signature-section">
+                <p>Ficaremos à disposição para qualquer esclarecimento e na espera de sua confirmação;</p>
+                <p>Atenciosamente,</p>
+                <div class="signature-placeholder" id="signaturePlaceholder">
+                    Clique para carregar assinatura (PNG)
+                </div>
+                <img id="signatureImage" class="signature-image" style="display: none;">
+                <input type="file" id="signatureInput" accept=".png" style="display: none;">
+                <p style="margin-top: 10px; font-size: 12px;">Rafael L. Ferraz</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <button class="print-btn no-print" onclick="imprimirOrcamento()" title="Imprimir Orçamento">🖨️</button>
+    <button class="edit-btn no-print" onclick="editarOrcamento()" id="editButton" style="display: none;">Editar</button>
+
+    <script>
+        let etapaAtual = 1;
+        const totalEtapas = 3;
+        let servicosSelecionados = [];
+
+        // Configuração de preços baseada na nova tabela
+        const precos = {
+            layout: {
+                loja: {
+                    ate100: 2420.00,
+                    de101a300: 3285.00,
+                    de301a500: 4510.00
+                },
+                producao: {
+                    ate100: 2310.00,
+                    de101a300: 3100.00,
+                    de301a500: 4615.00,
+                    de501a999: 6445.00,
+                    de1000a1500: 8395.00
+                }
+            },
+            teto: {
+                loja: {
+                    ate100: 915.00,
+                    de101a300: 1250.00,
+                    de301a500: 1590.00
+                },
+                producao: {
+                    ate100: 380.00,
+                    de101a300: 510.00,
+                    de301a500: 640.00,
+                    de501a999: 830.00,
+                    de1000a1500: 1580.00
+                }
+            },
+            acabamento: {
+                loja: {
+                    ate100: 1785.00,
+                    de101a300: 2365.00,
+                    de301a500: 3530.00
+                },
+                producao: {
+                    ate100: 360.00,
+                    de101a300: 420.00,
+                    de301a500: 570.00,
+                    de501a999: 745.00,
+                    de1000a1500: 965.00
+                }
+            },
+            perspectiva: {
+                ate100: 2000.00,
+                de101a300: 2800.00,
+                de301a500: 4500.00
+            },
+            fachada: {
+                otimizacao: 1225.00,
+                acabamentos: 300.00,
+                placa: 300.00,
+                toldo: 820.00
+            },
+            detalhamento: {
+                simples: 250.00,
+                medio: 400.00,
+                complexo: 850.00
+            }
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Definir data atual
+            const hoje = new Date();
+            document.getElementById('data').value = hoje.toISOString().split('T')[0];
+            
+            // Configurar upload de assinatura
+            setupSignatureUpload();
+        });
+
+        function atualizarMetragens() {
+            const tipoProjeto = document.querySelector('input[name="tipoProjeto"]:checked').value;
+            const metragemLoja = document.getElementById('metragemLoja');
+            const metragemProducao = document.getElementById('metragemProducao');
+            
+            if (tipoProjeto === 'loja') {
+                metragemLoja.style.display = 'block';
+                metragemProducao.style.display = 'none';
+                document.getElementById('m2Producao').value = '';
+            } else if (tipoProjeto === 'producao') {
+                metragemLoja.style.display = 'none';
+                metragemProducao.style.display = 'block';
+                document.getElementById('m2Loja').value = '';
+            } else {
+                metragemLoja.style.display = 'block';
+                metragemProducao.style.display = 'block';
+            }
+        }
+
+        function toggleMainService(serviceId) {
+            const checkbox = document.getElementById(serviceId);
+            const item = checkbox.closest('.checkbox-item');
+            const subOptions = document.getElementById(serviceId + 'Options');
+            
+            if (checkbox.checked) {
+                item.classList.add('checked');
+                if (subOptions) {
+                    subOptions.classList.add('show');
+                }
+            } else {
+                item.classList.remove('checked');
+                if (subOptions) {
+                    subOptions.classList.remove('show');
+                    // Desmarcar todas as sub-opções
+                    const subCheckboxes = subOptions.querySelectorAll('input[type="checkbox"]');
+                    subCheckboxes.forEach(cb => {
+                        if (!cb.disabled) cb.checked = false;
+                    });
+                }
+            }
+        }
+
+        function proximaEtapa() {
+            if (etapaAtual < totalEtapas) {
+                if (validarEtapa(etapaAtual)) {
+                    document.getElementById('step' + etapaAtual).classList.remove('active');
+                    etapaAtual++;
+                    document.getElementById('step' + etapaAtual).classList.add('active');
+                    
+                    if (etapaAtual === 3) {
+                        gerarResumo();
+                        document.getElementById('btnProximo').textContent = 'Gerar Orçamento';
+                    }
+                    
+                    atualizarBotoes();
+                }
+            } else {
+                gerarOrcamentoFinal();
+            }
+        }
+
+        function voltarEtapa() {
+            if (etapaAtual > 1) {
+                document.getElementById('step' + etapaAtual).classList.remove('active');
+                etapaAtual--;
+                document.getElementById('step' + etapaAtual).classList.add('active');
+                
+                if (etapaAtual < 3) {
+                    document.getElementById('btnProximo').textContent = 'Próximo';
+                }
+                
+                atualizarBotoes();
+            }
+        }
+
+        function atualizarBotoes() {
+            document.getElementById('btnAnterior').disabled = etapaAtual === 1;
+        }
+
+        function validarEtapa(etapa) {
+            if (etapa === 1) {
+                const cliente = document.getElementById('cliente').value.trim();
+                const estabelecimento = document.getElementById('estabelecimento').value.trim();
+                const data = document.getElementById('data').value;
+                
+                if (!cliente || !estabelecimento || !data) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return false;
+                }
+            }
+            
+            if (etapa === 2) {
+                const servicosMarcados = document.querySelectorAll('.main-checkbox input[type="checkbox"]:checked');
+                if (servicosMarcados.length === 0) {
+                    alert('Por favor, selecione pelo menos um serviço.');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function getFaixaPreco(metragem) {
+            if (metragem <= 100) return 'ate100';
+            if (metragem <= 300) return 'de101a300';
+            if (metragem <= 500) return 'de301a500';
+            if (metragem <= 999) return 'de501a999';
+            return 'de1000a1500';
+        }
+
+        function calcularPrecoServico(servicoId) {
+            const tipoProjeto = document.querySelector('input[name="tipoProjeto"]:checked').value;
+            let m2Loja = parseFloat(document.getElementById('m2Loja').value) || 0;
+            let m2Producao = parseFloat(document.getElementById('m2Producao').value) || 0;
+            
+            let valorTotal = 0;
+            
+            if (servicoId === 'layout') {
+                if (tipoProjeto === 'loja' || tipoProjeto === 'ambos') {
+                    const faixa = getFaixaPreco(m2Loja);
+                    valorTotal += precos.layout.loja[faixa] || 0;
+                }
+                if (tipoProjeto === 'producao' || tipoProjeto === 'ambos') {
+                    const faixa = getFaixaPreco(m2Producao);
+                    valorTotal += precos.layout.producao[faixa] || 0;
+                }
+            } else if (servicoId === 'planta') {
+                // Planta técnica é 55% do valor do layout
+                const valorLayout = calcularPrecoServico('layout');
+                valorTotal = valorLayout * 0.55;
+            } else if (servicoId === 'teto') {
+                if (tipoProjeto === 'loja' || tipoProjeto === 'ambos') {
+                    const faixa = getFaixaPreco(m2Loja);
+                    valorTotal += precos.teto.loja[faixa] || 0;
+                }
+                if (tipoProjeto === 'producao' || tipoProjeto === 'ambos') {
+                    const faixa = getFaixaPreco(m2Producao);
+                    valorTotal += precos.teto.producao[faixa] || 0;
+                }
+            } else if (servicoId === 'acabamento') {
+                if (tipoProjeto === 'loja' || tipoProjeto === 'ambos') {
+                    const faixa = getFaixaPreco(m2Loja);
+                    valorTotal += precos.acabamento.loja[faixa] || 0;
+                }
+                if (tipoProjeto === 'producao' || tipoProjeto === 'ambos') {
+                    const faixa = getFaixaPreco(m2Producao);
+                    valorTotal += precos.acabamento.producao[faixa] || 0;
+                }
+            } else if (servicoId === 'perspectiva') {
+                // Perspectiva 3D usa a metragem total (loja + produção)
+                const metragemTotal = m2Loja + m2Producao;
+                const faixa = getFaixaPreco(metragemTotal);
+                valorTotal = precos.perspectiva[faixa] || 0;
+            } else if (servicoId === 'levantamento') {
+                // Levantamento é 20% + 15% do valor do layout
+                const valorLayout = calcularPrecoServico('layout');
+                valorTotal = valorLayout * 0.35; // 20% + 15%
+            }
+            
+            return valorTotal;
+        }
+
+        function gerarResumo() {
+            servicosSelecionados = [];
+            let valorTotal = 0;
+            
+            // Verificar serviços principais
+            const servicosPrincipais = ['levantamento', 'layout', 'planta', 'teto', 'acabamento', 'perspectiva'];
+            
+            servicosPrincipais.forEach(servico => {
+                const checkbox = document.getElementById(servico);
+                if (checkbox && checkbox.checked) {
+                    const valor = calcularPrecoServico(servico);
+                    servicosSelecionados.push({
+                        nome: checkbox.nextElementSibling.textContent,
+                        valor: valor
+                    });
+                    valorTotal += valor;
+                }
+            });
+            
+            // Verificar fachada
+            if (document.getElementById('fachada').checked) {
+                let valorFachada = precos.fachada.otimizacao;
+                let nomeFachada = 'Fachada - Otimização do visual externo';
+                
+                if (document.getElementById('fachada_acabamentos').checked) {
+                    valorFachada += precos.fachada.acabamentos;
+                    nomeFachada += ' + Especificação de acabamentos';
+                }
+                if (document.getElementById('fachada_placa').checked) {
+                    valorFachada += precos.fachada.placa;
+                    nomeFachada += ' + Design da placa externa';
+                }
+                if (document.getElementById('fachada_toldo').checked) {
+                    valorFachada += precos.fachada.toldo;
+                    nomeFachada += ' + Especificação de toldo';
+                }
+                
+                servicosSelecionados.push({
+                    nome: nomeFachada,
+                    valor: valorFachada
+                });
+                valorTotal += valorFachada;
+            }
+            
+            // Verificar detalhamento
+            if (document.getElementById('detalhamento').checked) {
+                ['simples', 'medio', 'complexo'].forEach(tipo => {
+                    const checkbox = document.getElementById('detalhamento_' + tipo);
+                    if (checkbox && checkbox.checked) {
+                        servicosSelecionados.push({
+                            nome: 'Design de Peças - ' + tipo.charAt(0).toUpperCase() + tipo.slice(1),
+                            valor: precos.detalhamento[tipo]
+                        });
+                        valorTotal += precos.detalhamento[tipo];
+                    }
+                });
+            }
+            
+            // Gerar tabela de resumo
+            atualizarTabelaResumo(valorTotal);
+        }
+
+        function atualizarCalculos() {
+            // Recalcular apenas se já temos serviços selecionados
+            if (servicosSelecionados.length > 0) {
+                let valorTotal = 0;
+                servicosSelecionados.forEach(servico => {
+                    valorTotal += servico.valor;
+                });
+                atualizarTabelaResumo(valorTotal);
+            }
+        }
+
+        function atualizarTabelaResumo(valorTotal) {
+            const numeroParcelas = parseInt(document.getElementById('numeroParcelas').value) || 3;
+            const descontoVista = parseFloat(document.getElementById('descontoVista').value) || 5;
+            
+            let html = '<table class="resume-table">';
+            html += '<thead><tr><th>Serviço</th><th>Valor (R$)</th></tr></thead>';
+            html += '<tbody>';
+            
+            servicosSelecionados.forEach(servico => {
+                html += `<tr><td>${servico.nome}</td><td>R$ ${servico.valor.toFixed(2).replace('.', ',')}</td></tr>`;
+            });
+            
+            html += `<tr class="total-row"><td><strong>TOTAL</strong></td><td><strong>R$ ${valorTotal.toFixed(2).replace('.', ',')}</strong></td></tr>`;
+            
+            // Adicionar informações de pagamento
+            const valorParcela = (valorTotal / numeroParcelas).toFixed(2).replace('.', ',');
+            const valorVista = (valorTotal * (1 - descontoVista/100)).toFixed(2).replace('.', ',');
+            
+            html += `<tr style="background-color: #e8f4f8;"><td><strong>${numeroParcelas}x de:</strong></td><td><strong>R$ ${valorParcela}</strong></td></tr>`;
+            html += `<tr style="background-color: #d5f4e6;"><td><strong>À vista (${descontoVista}% desc.):</strong></td><td><strong>R$ ${valorVista}</strong></td></tr>`;
+            
+            html += '</tbody></table>';
+            
+            document.getElementById('resumoOrcamento').innerHTML = html;
+        }
+
+        function gerarOrcamentoFinal() {
+            // Preencher dados do cabeçalho
+            const data = new Date(document.getElementById('data').value);
+            document.getElementById('budgetDate').textContent = data.toLocaleDateString('pt-BR');
+            
+            // Preencher dados do cliente
+            document.getElementById('budgetEstabelecimento').textContent = document.getElementById('estabelecimento').value;
+            document.getElementById('budgetCliente').textContent = document.getElementById('cliente').value;
+            
+            const tipoProjeto = document.querySelector('input[name="tipoProjeto"]:checked').value;
+            let tipoTexto = '';
+            let metragemTexto = '';
+            
+            if (tipoProjeto === 'loja') {
+                tipoTexto = 'Loja';
+                metragemTexto = document.getElementById('m2Loja').value + ' m²';
+            } else if (tipoProjeto === 'producao') {
+                tipoTexto = 'Produção';
+                metragemTexto = document.getElementById('m2Producao').value + ' m²';
+            } else {
+                tipoTexto = 'Loja e Produção';
+                const m2Loja = document.getElementById('m2Loja').value || '0';
+                const m2Producao = document.getElementById('m2Producao').value || '0';
+                metragemTexto = `Loja: ${m2Loja} m² | Produção: ${m2Producao} m²`;
+            }
+            
+            document.getElementById('budgetTipoProjeto').textContent = tipoTexto;
+            document.getElementById('budgetMetragem').textContent = metragemTexto;
+            
+            // Preencher tabela de itens
+            const tbody = document.getElementById('budgetItemsBody');
+            tbody.innerHTML = '';
+            
+            let valorTotal = 0;
+            let itemNumber = 1;
+            
+            servicosSelecionados.forEach(servico => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = itemNumber.toString().padStart(2, '0');
+                row.insertCell(1).textContent = servico.nome;
+                row.insertCell(2).textContent = 'R$ ' + servico.valor.toFixed(2).replace('.', ',');
+                row.cells[2].classList.add('price-cell');
+                valorTotal += servico.valor;
+                itemNumber++;
+            });
+            
+            // Linha de total
+            const totalRow = tbody.insertRow();
+            totalRow.classList.add('total-row');
+            totalRow.insertCell(0).textContent = '';
+            totalRow.insertCell(1).innerHTML = '<strong>VALOR TOTAL</strong>';
+            totalRow.insertCell(2).innerHTML = '<strong>R$ ' + valorTotal.toFixed(2).replace('.', ',') + '</strong>';
+            totalRow.cells[2].classList.add('price-cell');
+            
+            // Atualizar condições de pagamento com valor calculado
+            const numeroParcelas = parseInt(document.getElementById('numeroParcelas').value) || 3;
+            const descontoVista = parseFloat(document.getElementById('descontoVista').value) || 5;
+            const valorParcela = (valorTotal / numeroParcelas).toFixed(2).replace('.', ',');
+            const valorVista = (valorTotal * (1 - descontoVista/100)).toFixed(2).replace('.', ',');
+            
+            document.getElementById('paymentTerms').value = `Pagamento a prazo em até ${numeroParcelas} pagamentos iguais de R$ ${valorParcela}, de 30/30 dias.
+ou pagamento à vista com ${descontoVista}% de desconto: R$ ${valorVista}.`;
+            
+            // Preencher observações se houver
+            const observacoes = document.getElementById('observacoes').value;
+            if (observacoes) {
+                const currentObs = document.getElementById('generalObservations').value;
+                document.getElementById('generalObservations').value = currentObs + '\n\nObservações adicionais:\n' + observacoes;
+            }
+            
+            // Mostrar orçamento final
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('finalBudget').classList.add('show');
+            document.getElementById('editButton').style.display = 'block';
+        }
+
+        function setupSignatureUpload() {
+            const placeholder = document.getElementById('signaturePlaceholder');
+            const input = document.getElementById('signatureInput');
+            const image = document.getElementById('signatureImage');
+            
+            placeholder.addEventListener('click', () => {
+                input.click();
+            });
+            
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type === 'image/png') {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        image.src = e.target.result;
+                        image.style.display = 'block';
+                        placeholder.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Por favor, selecione um arquivo PNG válido.');
+                }
+            });
+        }
+
+        function editarOrcamento() {
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('finalBudget').classList.remove('show');
+            document.getElementById('editButton').style.display = 'none';
+        }
+
+        function imprimirOrcamento() {
+            window.print();
+        }
+
+        // Permitir múltiplas seleções de detalhamento
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox' && e.target.id.includes('detalhamento_')) {
+                // Permitir múltiplas seleções para detalhamento
+                // Não fazer nada especial, deixar o usuário selecionar quantos quiser
+            }
+        });
+    </script>
+</body>
+</html>
